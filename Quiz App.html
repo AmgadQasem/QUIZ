@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .question-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz App</h1>
+    <div id="quiz-container">
+        <!-- Questions will be inserted here -->
+    </div>
+    <button id="submit-btn" onclick="submitQuiz()">Submit Quiz</button>
+    <div id="result"></div>
+
+    <script>
+        const quizData = [
+            {
+                question: "What is the capital of France?",
+                options: ["London", "Berlin", "Paris", "Madrid"],
+                correct: 2
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Venus", "Mars", "Jupiter", "Saturn"],
+                correct: 1
+            },
+            {
+                question: "What is 2 + 2?",
+                options: ["3", "4", "5", "6"],
+                correct: 1
+            }
+        ];
+
+        function loadQuiz() {
+            const quizContainer = document.getElementById("quiz-container");
+            quizData.forEach((question, index) => {
+                const questionDiv = document.createElement("div");
+                questionDiv.className = "question-container";
+                questionDiv.innerHTML = `
+                    <h3>Question ${index + 1}: ${question.question}</h3>
+                    <div class="options">
+                        ${question.options.map((option, optionIndex) => `
+                            <label>
+                                <input type="radio" name="q${index}" value="${optionIndex}">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                quizContainer.appendChild(questionDiv);
+            });
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            quizData.forEach((question, index) => {
+                const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selectedOption && parseInt(selectedOption.value) === question.correct) {
+                    score++;
+                }
+            });
+            
+            const resultDiv = document.getElementById("result");
+            resultDiv.textContent = `Your score: ${score} out of ${quizData.length}`;
+        }
+
+        // Load the quiz when the page loads
+        window.onload = loadQuiz;
+    </script>
+</body>
+</html>
